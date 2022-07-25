@@ -342,8 +342,18 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const brackets = '[]{}()<>';
+  const stack = [];
+  for (let i = 0; i < str.length; i += 1) {
+    const index = brackets.indexOf(str[i]);
+    if (index % 2 === 0) {
+      stack.push(index + 1);
+    } else if (stack.pop() !== index) {
+      return false;
+    }
+  }
+  return stack.length === 0;
 }
 
 
@@ -384,10 +394,20 @@ function toNaryString(num, n) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  let str = pathes[0].substring(0, pathes[0].lastIndexOf('/'));
+  while (str.length > 0) {
+    const string = str;
+    if (!pathes.every((value) => value.startsWith('/'))) {
+      return '';
+    }
+    if (pathes.every((value) => value.startsWith(`${string}/`))) {
+      return `${string}/`;
+    }
+    str = string.slice(0, str.lastIndexOf('/'));
+  }
+  return '/';
 }
-
 
 /**
  * Returns the product of two specified matrixes.
@@ -445,9 +465,29 @@ function getMatrixProduct(m1, m2) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  for (let i = 0; i < 3; i += 1) {
+    if (position[i][0] === position[i][1] && position[i][1] === position[i][2]) {
+      if (position[i][0]) return position[i][0];
+    }
+  }
+  for (let i = 0; i < 3; i += 1) {
+    if (position[0][i] === position[1][i] && position[1][i] === position[2][i]) {
+      if (position[0][i]) return position[0][i];
+    }
+  }
+  if (position[0][0] === position[1][1] && position[1][1] === position[2][2]) {
+    return position[0][0];
+  }
+  if (position[0][2] === position[1][1] && position[1][1] === position[2][0]) {
+    return position[0][2];
+  }
+  return undefined;
 }
+
+evaluateTicTacToePosition([[undefined, undefined, undefined],
+  ['X', 'X', '0'],
+  ['X', undefined, '0']]);
 
 
 module.exports = {
